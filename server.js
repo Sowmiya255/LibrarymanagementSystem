@@ -1,0 +1,57 @@
+require("dotenv").config();
+const express = require("express");
+const mongoose = require("mongoose");
+
+const app = express();
+app.use(express.json()); 
+
+const connectDB = async () => {
+  try {
+    await mongoose.connect(process.env.MONGO_URI);
+    console.log("✅ MongoDB Atlas connected...");
+  } catch (err) {
+    console.error("❌ MongoDB connection failed:", err.message);
+    process.exit(1); 
+  }
+};
+connectDB();
+
+const bookSchema = new mongoose.Schema(
+  {
+    title: { type: String, required: true },
+    author: { type: String, required: true },
+    description: String,
+    publishedDate: Date,
+    pages: Number,
+  },
+  { timestamps: true }
+);
+
+const Book = mongoose.model("Book", bookSchema);
+
+
+app.post("/books", async (req, res) => {
+  try {
+    const { title, author, description, publishedDate, pages } = req.body;
+
+    if (!title || !author)
+      return res.status(400).json({ error: "Title and Author are required" });
+
+    const book = new Book({ title, author, description, publishedDate, pages });
+    const savedBook = await book.save();
+
+    res.status(201).json(savedBook);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ error: err.message });
+  }
+});
+
+
+app.get("/", (req, res) => {
+  res.send("📚 Library Management API is running");
+});
+
+
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
