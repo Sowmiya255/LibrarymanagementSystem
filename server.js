@@ -8,9 +8,9 @@ app.use(express.json());
 const connectDB = async () => {
   try {
     await mongoose.connect(process.env.MONGO_URI);
-    console.log("✅ MongoDB connected...");
+    console.log(" MongoDB connected...");
   } catch (err) {
-    console.error("❌ MongoDB connection failed:", err.message);
+    console.error(" MongoDB connection failed:", err.message);
     process.exit(1);
   }
 };
@@ -32,7 +32,7 @@ const Book = mongoose.model("Book", bookSchema);
 
 
 app.get("/", (req, res) => {
-  res.send("📚 Library Management API is running");
+  res.send(" Library Management API is running");
 });
 
 app.post("/books", async (req, res) => {
@@ -79,4 +79,4 @@ app.delete("/book/:id", async (req, res) => {
 
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`🚀 Server running on port ${PORT}`));
+app.listen(PORT, () => console.log(` Server running on port ${PORT}`));
