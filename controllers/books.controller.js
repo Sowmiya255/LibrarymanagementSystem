@@ -1,7 +1,12 @@
 import Book from"../models/book.model.js";
 
-export const BookIndex = (req,res) => {
-    res.send("books list");
+export const BookIndex = async (req,res) => {
+    try{
+        const books = await Book.find();
+        res.json(books);
+    }catch(error){
+        res.status(500).json({message: error.message});
+    }
 };
 export const BookCreate = async (req,res) => {
      
@@ -27,12 +32,33 @@ try{
 
 
 
-export const BookUpdate =(req,res) => {
-     res.send("book list updated");
+export const BookUpdate = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const updatedBook = await Book.findByIdAndUpdate(id, req.body, { new: true });
+        
+        if (!updatedBook) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        res.json(updatedBook);
+    } catch (error) {
+        res.status(400).json({ message: error.message });
+    }
 };
 
 
+export const BookDelete = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const deletedBook = await Book.findByIdAndDelete(id);
 
-export const BookDelete = (req,res) => {
-     res.send("book were deleted");
+        if (!deletedBook) {
+            return res.status(404).json({ message: "Book not found" });
+        }
+
+        res.json({ message: "Book deleted successfully" });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
 };
