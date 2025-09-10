@@ -32,6 +32,36 @@ try{
 
 
 
+
+export const BookId = async(req,res) => {
+    try{
+        const { id } = req.params;
+        const searchBook = await Book.findById(id);
+        if(!Book){
+            return res.status(404).json({message:"Book not Found"});
+        }
+        res.json(searchBook);
+    }catch(error){
+        res.status(400).json({message :  error.message});
+    }
+};
+
+
+
+
+export const BookName = async (req,res) =>{
+    try{
+        const {name} = req.query;
+        const SearchBookName = await Book.find({BookName : new RegExp(name,"i")});
+res.json(SearchBookName);
+
+        }catch(error){
+            res.status(400).json({message:"error.message"});
+        }
+    };
+
+
+
 export const BookUpdate = async (req, res) => {
     try {
         const { id } = req.params;
