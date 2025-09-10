@@ -14,7 +14,7 @@ export const BookCreate = async (req,res) => {
     console.log(req.body);
 
     const newBook = new Book({
-         Bookid:req.body.Bookid,
+     Bookid:req.body.Bookid,
     Bookname:req.body.Bookname,
     Author: req.body.Author,
     Publishedyear:req.body.Publishedyear,
