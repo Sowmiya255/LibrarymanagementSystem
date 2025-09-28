@@ -1,5 +1,5 @@
 import Book from"../models/book.model.js";
-
+import jwt from "jsonwebtoken";
 export const BookIndex = async (req,res) => {
     try{
         const books = await Book.find();
@@ -91,4 +91,55 @@ export const BookDelete = async (req, res) => {
     } catch (error) {
         res.status(500).json({ message: error.message });
     }
+};
+
+export const fetchdata = async(req,res) =>{
+    try{
+        const offset = parseInt(req.query.offset);
+        const limit = parseInt(req.query.limit);
+
+       const books = await Book.find().skip(offset).limit(limit);
+       const data = await books.json();
+      
+     if(!books){
+        return res.status(404).json({message:"limits not found"});
+    }
+     return data;
+}
+catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+};
+
+
+
+
+
+
+
+
+
+export const login = async (req, res) => {
+  try {
+    const { author, id } = req.body;
+
+   
+    if (author !== "admin" || id !== "123") {
+      return res.status(404).json({ message: "User not found" });
+    }
+
+    const token = jwt.sign(
+      { id, author },
+      process.env.JWT_SECRET || "secretkey",
+      { expiresIn: "1h" }
+    );
+
+    return res.status(200).json({
+      message: "Login successful",
+      token,
+    });
+  } catch (error) {
+    return res
+      .status(500).json({ message: "Server Error", error: error.message });
+  }
 };
