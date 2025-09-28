@@ -3,7 +3,7 @@ import Book from"../models/book.model.js";
 export const BookIndex = async (req,res) => {
     try{
         const books = await Book.find();
-        res.json(books);
+        res.json(books);  
     }catch(error){
         res.status(500).json({message: error.message});
     }
