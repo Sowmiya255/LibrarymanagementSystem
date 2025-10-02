@@ -1,6 +1,7 @@
 import express from "express";
 import { BookCreate, BookDelete, BookId, BookIndex, BookName, BookUpdate, fetchdata, login } from "../controllers/books.controller.js";
-import auth from  "../middleware/auth.js";
+import auth from "../middleware/auth.js";
+
 
 const router = express.Router();
 
@@ -18,6 +19,6 @@ router.delete("/:id",auth,BookDelete);
 
 router.get("/:fetch",fetchdata);
 
-router.post("/:login",auth,login);
+router.post("/:login",login);
 
 export default router;

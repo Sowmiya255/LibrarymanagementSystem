@@ -113,21 +113,9 @@ catch (error) {
 
 
 
-
-
-
-
-
-
 export const login = async (req, res) => {
   try {
     const { author, id } = req.body;
-
-   
-    if (author !== "admin" || id !== "123") {
-      return res.status(404).json({ message: "User not found" });
-    }
-
     const token = jwt.sign(
       { id, author },
       process.env.JWT_SECRET || "secretkey",
@@ -140,6 +128,7 @@ export const login = async (req, res) => {
     });
   } catch (error) {
     return res
-      .status(500).json({ message: "Server Error", error: error.message });
+      .status(500)
+      .json({ message: "Server Error", error: error.message });
   }
 };
